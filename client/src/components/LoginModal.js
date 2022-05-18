@@ -102,7 +102,7 @@ function LoginModal({ handleLoginSuccess, setuserInfo, setIsopen }) {
         })
         .then((res) => setuserInfo(res.data.data.userInfo))
         .then(() => setOpen(false))
-        .then(() => setIsopen(false));
+        // .then(() => setIsopen(false));
     }
   };
 

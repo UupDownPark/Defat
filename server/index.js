@@ -25,14 +25,6 @@ app.use(
 
 app.use(cookieParser());
 
-// app.get('/auth', controllers.auth)
-// app.post('/signup', controllers.signup)
-// app.post('/login', controllers.login);
-// app.post('/logout', controllers.logout);
-// app.get('/:userId', controllers.mypage.get);
-// app.patch('/:userId', controllers.mypage.patch);
-// app.delete('/:userId', controllers.mypage.delete)
-
 app.use('/auth', authRouter);
 // app.use('/main', mainRouter);
 app.use('/mealkit', mealkitRouter);

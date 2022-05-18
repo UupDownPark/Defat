@@ -43,7 +43,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<MainPage />} />
         <Route path="/Mealkit" element={<Mealkit />} />
-        <Route path="/TodayMeal" element={<TodayMeal />} />
+        <Route path="/TodayMeal" element={<TodayMeal isLogin={isLogin} />} />
         <Route path="/MyPage" element={<MyPage />} />
         <Route path="/Signin" element={<Signin />} />
       </Routes>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AddFood from '../components/AddFood';
 
@@ -27,7 +28,7 @@ const PushMealBar = styled.div`
   font-size: 20px;
   background-color: bisque;
   width: 45vw;
-  cursor : pointer;
+  cursor: pointer;
 `;
 const TodayTotal = styled.div`
   padding-left: 50px;
@@ -46,9 +47,9 @@ const BoxDiv = styled.div`
 const H2 = styled.h2`
   justify-self: center;
   text-align: center;
-`
+`;
 
-function TodayMeal() {
+function TodayMeal({ isLogin }) {
   const [openModal, setOpenModal] = useState(false);
   const [modalNum, setModalNum] = useState(0);
   const [morning, setMorning] = useState([]);
@@ -57,6 +58,15 @@ function TodayMeal() {
   const NowDate = new Date().toLocaleDateString();
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const getDay = week[new Date().getDay()];
+  const [user, setUser] = useState({});
+
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     axios
+  //       .get('https://localhost:4000/todaymenu/')
+  //       .then((resp) => console.log(resp));
+  //   }
+  // }, []);
 
   const clickPlus = (num) => {
     setOpenModal(!openModal);
@@ -64,66 +74,83 @@ function TodayMeal() {
   };
   const removeFood = (idx) => {
     if (modalNum === 1) {
-      morning.splice(idx,1)
+      morning.splice(idx, 1);
       setMorning([...morning]);
     }
     if (modalNum === 2) {
-      lunch.splice(idx,1)
+      lunch.splice(idx, 1);
       setLunch([...lunch]);
     }
     if (modalNum === 3) {
-      dinner.splice(idx,1)
+      dinner.splice(idx, 1);
       setDinner([...dinner]);
     }
   };
 
   const addFoods = (food) => {
-    if(food.name === '') return
+    if (food.name === '') return;
     if (modalNum === 1) {
-      for(let i=0; i < morning.length; i++) {
-        if(morning[i].name === food.name) {
-          morning[i].quantity += food.quantity
-          setMorning([...morning])
+      for (let i = 0; i < morning.length; i++) {
+        if (morning[i].name === food.name) {
+          morning[i].quantity += food.quantity;
+          setMorning([...morning]);
           return;
         }
       }
-      setMorning([...morning, food])
+      axios
+        .post('https://localhost:4000/todaymenu', {
+          kit_id: food.kit_id,
+          when: 'breakfast',
+        })
+        .then((resp) => console.log('성공'));
+      setMorning([...morning, food]);
     }
     if (modalNum === 2) {
-        for(let i=0; i < lunch.length; i++) {
-          if(lunch[i].name === food.name) {
-            lunch[i].quantity += food.quantity
-            setLunch([...lunch])
-            return;
-          }
+      for (let i = 0; i < lunch.length; i++) {
+        if (lunch[i].name === food.name) {
+          lunch[i].quantity += food.quantity;
+          setLunch([...lunch]);
+          return;
         }
-        setLunch([...lunch, food])
+      }
+      axios
+        .post('https://localhost:4000/todaymenu/', {
+          kit_id: food.kit_id,
+          when: 'lunch',
+        })
+        .then((resp) => console.log('성공'));
+      setLunch([...lunch, food]);
     }
     if (modalNum === 3) {
-        for(let i=0; i < dinner.length; i++) {
-          if(dinner[i].name === food.name) {
-            dinner[i].quantity += food.quantity
-            setDinner([...dinner])
-            return
-          }
+      for (let i = 0; i < dinner.length; i++) {
+        if (dinner[i].name === food.name) {
+          dinner[i].quantity += food.quantity;
+          setDinner([...dinner]);
+          return;
         }
-        setDinner([...dinner, food])
+      }
+      axios
+        .post('https://localhost:4000/todaymenu/', {
+          kit_id: food.kit_id,
+          when: 'dinner',
+        })
+        .then((resp) => console.log('성공'));
+      setDinner([...dinner, food]);
     }
   };
-  console.log(morning);
-  const calculator= () => {
-    let sum = 0
-    for(let i=0; i < morning.length; i++) {
-      sum = sum + (morning[i].kcal*morning[i].quantity)
+  const calculator = () => {
+    let sum = 0;
+    for (let i = 0; i < morning.length; i++) {
+      sum = sum + morning[i].kcal * morning[i].quantity;
     }
-    for(let i=0; i < lunch.length; i++) {
-      sum = sum + (lunch[i].kcal*lunch[i].quantity)
+    for (let i = 0; i < lunch.length; i++) {
+      sum = sum + lunch[i].kcal * lunch[i].quantity;
     }
-    for(let i=0; i < dinner.length; i++) {
-      sum = sum + (dinner[i].kcal*dinner[i].quantity)
+    for (let i = 0; i < dinner.length; i++) {
+      sum = sum + dinner[i].kcal * dinner[i].quantity;
     }
-    return sum
-  }
+    return sum;
+  };
   return (
     <TodaysContainer>
       <div>
@@ -141,13 +168,17 @@ function TodayMeal() {
             {openModal && modalNum === 1 ? (
               <AddFood addFoods={addFoods} />
             ) : null}
-            {morning.length ===0? null:morning.map((food, idx) => (
-              <FoodList key={idx}>
-                <div>{food.name} 수량 {food.quantity}</div>
-                <div>{(food.kcal)*(food.quantity)}kcal</div>
-                <div onClick={() => removeFood(idx)}>X</div>
-              </FoodList>
-            ))}
+            {morning.length === 0
+              ? null
+              : morning.map((food, idx) => (
+                  <FoodList key={idx}>
+                    <div>
+                      {food.name} 수량 {food.quantity}
+                    </div>
+                    <div>{food.kcal * food.quantity}kcal</div>
+                    <div onClick={() => removeFood(idx)}>X</div>
+                  </FoodList>
+                ))}
           </BoxDiv>
           <br></br>
           <BoxDiv className="점심">
@@ -158,13 +189,17 @@ function TodayMeal() {
             {openModal && modalNum === 2 ? (
               <AddFood addFoods={addFoods} />
             ) : null}
-            {lunch.length===0? null:lunch.map((food, idx) => (
-              <FoodList key={idx}>
-                <div>{food.name} 수량 {food.quantity}</div>
-                <div>{(food.kcal)*(food.quantity)}kcal</div>
-                <div onClick={() => removeFood(idx)}>X</div>
-              </FoodList>
-            ))}
+            {lunch.length === 0
+              ? null
+              : lunch.map((food, idx) => (
+                  <FoodList key={idx}>
+                    <div>
+                      {food.name} 수량 {food.quantity}
+                    </div>
+                    <div>{food.kcal * food.quantity}kcal</div>
+                    <div onClick={() => removeFood(idx)}>X</div>
+                  </FoodList>
+                ))}
           </BoxDiv>
           <br></br>
           <BoxDiv className="저녁">
@@ -175,13 +210,17 @@ function TodayMeal() {
             {openModal && modalNum === 3 ? (
               <AddFood addFoods={addFoods} />
             ) : null}
-            {dinner.length===0?null:dinner.map((food, idx) => (
-              <FoodList key={idx}>
-                <div>{food.name} 수량 {food.quantity}</div>
-                <div>{(food.kcal)*(food.quantity)}kcal</div>
-                <div onClick={() => removeFood(idx)}>X</div>
-              </FoodList>
-            ))}
+            {dinner.length === 0
+              ? null
+              : dinner.map((food, idx) => (
+                  <FoodList key={idx}>
+                    <div>
+                      {food.name} 수량 {food.quantity}
+                    </div>
+                    <div>{food.kcal * food.quantity}kcal</div>
+                    <div onClick={() => removeFood(idx)}>X</div>
+                  </FoodList>
+                ))}
           </BoxDiv>
           <br></br>
         </div>

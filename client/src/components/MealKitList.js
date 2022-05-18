@@ -53,7 +53,7 @@ function MealKitList({dataList}) {
   return (
     <Ul>
       {dataList.map((list) => {
-        return  <Li>
+        return  <Li key={list.id}>
         <MealContainer>
         <Img src={list.image}></Img>
         <Div bold={true}>{list.kit_name}</Div>
