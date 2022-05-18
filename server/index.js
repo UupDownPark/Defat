@@ -10,7 +10,7 @@ const app = express();
 const authRouter = require('./routes/AuthenticationRouter')
 // const mainRouter = require('./routes/MainRouter')
 const mealkitRouter = require('./routes/MealkitRouter')
-// const todayMenuRouter = require('./routes/Today_menuRouter')
+const todayMenuRouter = require('./routes/Today_menuRouter')
 const userRouter = require('./routes/UserRouter')
 
 app.use(express.json());
@@ -36,7 +36,7 @@ app.use(cookieParser());
 app.use('/auth', authRouter);
 // app.use('/main', mainRouter);
 app.use('/mealkit', mealkitRouter);
-// app.use('/todaymenu', todayMenuRouter);
+app.use('/todaymenu', todayMenuRouter);
 app.use('/user',userRouter) 
 
 
