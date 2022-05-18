@@ -25,6 +25,7 @@ function AddFood({ addFoods }) {
   const [chooseFood, setChooseFood] = useState(false);
   const [pickFood, setPickFood] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [kcal, setKcal] = useState(0)
   const [searchList, setSearchList] = useState([]);
   const handleReport = (event) => {
     event.preventDefault();
@@ -55,7 +56,7 @@ function AddFood({ addFoods }) {
     setChooseFood(true);
   };
   const clickAdd = () => {
-    addFoods({ name: pickFood.kit_name, quantity: quantity });
+    addFoods({ name: pickFood.kit_name, quantity: quantity, kcal: pickFood.kcal });
   };
   return (
     <ContainerDiv>
@@ -71,7 +72,7 @@ function AddFood({ addFoods }) {
         ) : null}
       </div>
       {chooseFood === true ? (
-        <Foodinfo pickFood={pickFood} setQuantity={setQuantity} />
+        <Foodinfo pickFood={pickFood} setQuantity={setQuantity} setKcal={setKcal} />
       ) : null}
       <RowDiv>
         <button

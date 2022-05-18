@@ -49,33 +49,38 @@ const Tag = styled.div``;
 
 function Mealkit() {
   const [dataList, setDataList] = useState([]);
-  const [searchInput, setSearchInput] = useState('')
+  const [searchInput, setSearchInput] = useState('');
   useEffect(() => {
     axios.get('https://localhost:4000/mealkit').then((resp) => {
       setDataList(resp.data.data);
     });
   }, []);
   const handleInput = (e) => {
-    setSearchInput(e.target.value)
-  }
+    setSearchInput(e.target.value);
+  };
   const search = (e) => {
-    e.preventDefault()
-    if(searchInput === null || searchInput === '') {
+    e.preventDefault();
+    if (searchInput === null || searchInput === '') {
       axios.get(`https://localhost:4000/mealkit`).then((resp) => {
-        setDataList(resp.data.data)
-      })
+        setDataList(resp.data.data);
+      });
     }
-    axios.get(`https://localhost:4000/mealkit/find/${searchInput}`)
-    .then((resp) => setDataList(resp.data.data))
-    setSearchInput('')
-  }
+    axios
+      .get(`https://localhost:4000/mealkit/find/${searchInput}`)
+      .then((resp) => setDataList(resp.data.data));
+    setSearchInput('');
+  };
   return (
     <div>
       <CategoryContainer>
         <CategoryRow>
           <form onSubmit={search}>
-          <input type="text" value={searchInput} onChange={handleInput}></input>
-          <button>검색</button>
+            <input
+              type="text"
+              value={searchInput}
+              onChange={handleInput}
+            ></input>
+            <button>검색</button>
           </form>
         </CategoryRow>
         {/* <CategoryRow>
@@ -111,7 +116,8 @@ function Mealkit() {
         </CategoryRow> */}
         <TagContainer></TagContainer>
       </CategoryContainer>
-      <div><MealKitList dataList={dataList} />
+      <div>
+        <MealKitList dataList={dataList} />
       </div>
     </div>
   );

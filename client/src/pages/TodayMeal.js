@@ -82,7 +82,6 @@ function TodayMeal() {
     if (modalNum === 1) {
       for(let i=0; i < morning.length; i++) {
         if(morning[i].name === food.name) {
-          console.log('실행');
           morning[i].quantity += food.quantity
           setMorning([...morning])
           return;
@@ -112,6 +111,19 @@ function TodayMeal() {
     }
   };
   console.log(morning);
+  const calculator= () => {
+    let sum = 0
+    for(let i=0; i < morning.length; i++) {
+      sum = sum + (morning[i].kcal*morning[i].quantity)
+    }
+    for(let i=0; i < lunch.length; i++) {
+      sum = sum + (lunch[i].kcal*lunch[i].quantity)
+    }
+    for(let i=0; i < dinner.length; i++) {
+      sum = sum + (dinner[i].kcal*dinner[i].quantity)
+    }
+    return sum
+  }
   return (
     <TodaysContainer>
       <div>
@@ -132,6 +144,7 @@ function TodayMeal() {
             {morning.length ===0? null:morning.map((food, idx) => (
               <FoodList key={idx}>
                 <div>{food.name} 수량 {food.quantity}</div>
+                <div>{(food.kcal)*(food.quantity)}kcal</div>
                 <div onClick={() => removeFood(idx)}>X</div>
               </FoodList>
             ))}
@@ -148,6 +161,7 @@ function TodayMeal() {
             {lunch.length===0? null:lunch.map((food, idx) => (
               <FoodList key={idx}>
                 <div>{food.name} 수량 {food.quantity}</div>
+                <div>{(food.kcal)*(food.quantity)}kcal</div>
                 <div onClick={() => removeFood(idx)}>X</div>
               </FoodList>
             ))}
@@ -164,6 +178,7 @@ function TodayMeal() {
             {dinner.length===0?null:dinner.map((food, idx) => (
               <FoodList key={idx}>
                 <div>{food.name} 수량 {food.quantity}</div>
+                <div>{(food.kcal)*(food.quantity)}kcal</div>
                 <div onClick={() => removeFood(idx)}>X</div>
               </FoodList>
             ))}
@@ -173,7 +188,7 @@ function TodayMeal() {
       </div>
       <TodayTotal className="오늘의합계">
         <h1>오늘의 합계</h1>
-        <TodayTotalBar text>오늘의 합계 구현예정</TodayTotalBar>
+        <TodayTotalBar text>{calculator()}kcal</TodayTotalBar>
       </TodayTotal>
       <br></br>
     </TodaysContainer>

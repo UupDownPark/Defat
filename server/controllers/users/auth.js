@@ -1,4 +1,4 @@
-const { isAuthorized } = require('../../middlewares/tokenFunctions')
+const { isAuthorized } = require('../../middlewares/tokenFunctions');
 const { user } = require('../../models');
 
 module.exports = {

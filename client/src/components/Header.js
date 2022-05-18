@@ -44,8 +44,8 @@ function Header({handleLoginSuccess,isLogin,setuserInfo,userInfo,setIsLogin}) {
   }
   const logoutButton = () =>{
     axios.post('https://localhost:4000/auth/logout')
-    setIsLogin(false)
-    setIsOpen(false)
+    isLogin(false)
+    
   }
   console.log(userInfo)
   return (

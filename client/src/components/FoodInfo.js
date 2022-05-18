@@ -29,14 +29,16 @@ const Input =styled.input`
 `
 
 function Foodinfo({pickFood, setQuantity}){
+  const [thisQuantity, setThisQuantity] = useState(1)
   const handleQuantityChange = (e) => {
+    setThisQuantity(e.target.value)
     setQuantity(Number(e.target.value))
   }
   return (
     <ContainerDiv>
       <Img src={pickFood.image}></Img>
       <Div bold={true}>{pickFood.kit_name}</Div>
-      <Div>{pickFood.kcal} kcal</Div>
+      <Div>{Number(pickFood.kcal)*thisQuantity} kcal</Div>
       <RowDiv>
       <Div>수량: </Div>
       <Input min={0} defaultValue={1} type='number' onChange={handleQuantityChange}></Input>
