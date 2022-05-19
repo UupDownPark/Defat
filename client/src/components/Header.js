@@ -39,26 +39,40 @@ function Header({handleLoginSuccess,isLogin,setuserInfo,userInfo,setIsLogin}) {
   
   const [isOpen, setIsOpen] = useState(false)
   const clickButton = () => {
-    setIsOpen(!isOpen)
-
+    setIsOpen(true);
+  };
+  const logoutButton = () => {
+    axios.post('https://localhost:4000/auth/logout');
+    setIsLogin(false);
+    setIsOpen(false);
+  };
+  const controlClose = (val) => {
+    setIsOpen(val)
   }
-  const logoutButton = () =>{
-    axios.post('https://localhost:4000/auth/logout')
-    setIsLogin(false)
-    setIsOpen(false)
-  }
-  console.log(userInfo)
+  console.log(userInfo);
   return (
     <div>
       <Div>
         <Link to="/">
           <Img src="img/logo2.png" />
         </Link>
-        {isLogin ?<div>
-          <LoginCompleteDiv>어서오시게 {userInfo.nickname} 님 <button onClick={logoutButton}>로그아웃</button></LoginCompleteDiv>
-          
-          </div>:<Button onClick={clickButton}>로그인</Button>}
-         {isOpen? <LoginModal handleLoginSuccess={handleLoginSuccess} setuserInfo={setuserInfo} setIsOpen={setIsOpen} isOpen={isOpen}/>:null}
+        {isLogin ? (
+          <div>
+            <LoginCompleteDiv>
+              어서오시게 {userInfo.nickname} 님{' '}
+              <button onClick={logoutButton}>로그아웃</button>
+            </LoginCompleteDiv>
+          </div>
+        ) : (
+          <Button onClick={clickButton}>로그인</Button>
+        )}
+        {isOpen ? (
+          <LoginModal
+            handleLoginSuccess={handleLoginSuccess}
+            setuserInfo={setuserInfo}
+            controlClose={controlClose}
+          />
+        ) : null}
       </Div>
       <Div>
         <Link to="/Mealkit">
