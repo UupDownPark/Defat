@@ -46,7 +46,6 @@ function AddFood({ addFoods }) {
     setFind(true);
     setChooseFood(false);
   };
-  console.log(inputText);
   const handleChangeInput = (event) => {
     setInputText(event.target.value);
   };

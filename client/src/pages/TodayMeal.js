@@ -58,30 +58,71 @@ function  TodayMeal({ isLogin }) {
   const NowDate = new Date().toLocaleDateString();
   const week = ['일', '월', '화', '수', '목', '금', '토'];
   const getDay = week[new Date().getDay()];
-  const [user, setUser] = useState({});
-
-  // useEffect(() => {
-  //   if (isLogin) {
-  //     axios
-  //       .get('https://localhost:4000/todaymenu/')
-  //       .then((resp) => console.log(resp));
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isLogin) {
+      axios.get('https://localhost:4000/todaymenu/').then((resp) => {
+        const userInfo = resp.data.data;
+        console.log(userInfo);
+        for (let i = 0; i < userInfo.length; i++) {
+          if (userInfo[i].breakfast) {
+            setMorning([
+              {
+                kit_id: userInfo[i].breakfast.id,
+                name: userInfo[i].breakfast.kit_name,
+                kcal: userInfo[i].breakfast.kcal,
+                quantity: 1,
+              },
+            ]);
+          }
+          if (userInfo[i].lunch) {
+            setLunch([
+              {
+                kit_id: userInfo[i].lunch.id,
+                name: userInfo[i].lunch.kit_name,
+                kcal: userInfo[i].lunch.kcal,
+                quantity: 1,
+              },
+            ]);
+          }
+          if (userInfo[i].dinner) {
+            setDinner([
+              {
+                kit_id: userInfo[i].dinner.id,
+                name: userInfo[i].dinner.kit_name,
+                kcal: userInfo[i].dinner.kcal,
+                quantity: 1,
+              },
+            ]);
+          }
+        }
+      });
+    }
+  }, []);
 
   const clickPlus = (num) => {
     setOpenModal(!openModal);
     setModalNum(num);
   };
+
   const removeFood = (idx) => {
     if (modalNum === 1) {
+      axios
+        .patch('https://localhost:4000/todaymenu/?when=breakfast')
+        .then(() => console.log('삭제'));
       morning.splice(idx, 1);
       setMorning([...morning]);
     }
     if (modalNum === 2) {
+      axios
+        .patch('https://localhost:4000/todaymenu/?when=lunch')
+        .then(() => console.log('삭제'));
       lunch.splice(idx, 1);
       setLunch([...lunch]);
     }
     if (modalNum === 3) {
+      axios
+        .patch('https://localhost:4000/todaymenu/?when=dinner')
+        .then(() => console.log('삭제'));
       dinner.splice(idx, 1);
       setDinner([...dinner]);
     }
