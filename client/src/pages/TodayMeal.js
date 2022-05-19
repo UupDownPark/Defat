@@ -49,7 +49,7 @@ const H2 = styled.h2`
   text-align: center;
 `;
 
-function TodayMeal({ isLogin }) {
+function  TodayMeal({ isLogin }) {
   const [openModal, setOpenModal] = useState(false);
   const [modalNum, setModalNum] = useState(0);
   const [morning, setMorning] = useState([]);
@@ -86,7 +86,7 @@ function TodayMeal({ isLogin }) {
       setDinner([...dinner]);
     }
   };
-
+  const userDate = axios.get("https://localhost:4000/todaymenu/")
   const addFoods = (food) => {
     if (food.name === '') return;
     if (modalNum === 1) {
@@ -98,7 +98,7 @@ function TodayMeal({ isLogin }) {
         }
       }
       axios
-        .post('https://localhost:4000/todaymenu', {
+        .post('https://localhost:4000/todaymenu/', {
           kit_id: food.kit_id,
           when: 'breakfast',
         })
@@ -118,7 +118,7 @@ function TodayMeal({ isLogin }) {
           kit_id: food.kit_id,
           when: 'lunch',
         })
-        .then((resp) => console.log('성공'));
+        .then((resp) => console.log(resp));
       setLunch([...lunch, food]);
     }
     if (modalNum === 3) {
